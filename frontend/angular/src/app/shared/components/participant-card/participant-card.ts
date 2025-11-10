@@ -5,9 +5,10 @@ import {
   HostBinding,
   inject,
   input,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { tap } from 'rxjs';
-
 import { IconButton } from '../icon-button/icon-button';
 import {
   AriaLabel,
@@ -46,6 +47,8 @@ export class ParticipantCard {
   readonly #modalService = inject(ModalService);
   readonly #userService = inject(UserService);
 
+  @Output() userDeleted = new EventEmitter<number>();
+
   public readonly isCurrentUser = computed(() => {
     const code = this.userCode();
     return !!code && this.participant()?.userCode === code;
@@ -58,9 +61,47 @@ export class ParticipantCard {
   public readonly ariaLabelCopy = AriaLabel.ParticipantLink;
   public readonly iconInfo = IconName.Info;
   public readonly ariaLabelInfo = AriaLabel.Info;
+  public readonly iconDelete = IconName.Delete;
+  public readonly ariaLabelDelete = AriaLabel.Delete;
 
   @HostBinding('tabindex') tab = 0;
   @HostBinding('class.list-row') rowClass = true;
+
+  public onDeleteClick(): void {
+    this.#userService
+      .deleteUser(this.participant().id)
+      .pipe(
+        tap({
+          next: () => {
+            // Emit the event to update the frontend after successful backend deletion
+            this.userDeleted.emit(this.participant().id);
+
+            const host = this.#host.nativeElement;
+            this.#popup.show(
+              host,
+              PopupPosition.Right,
+              {
+                message: 'User deleted successfully',
+                type: MessageType.Success,
+              },
+              false
+            );
+          },
+          error: (error) => {
+            // Handle error and show error message
+            console.error('Failed to delete user:', error);
+            const host = this.#host.nativeElement;
+            this.#popup.show(
+              host,
+              PopupPosition.Right,
+              { message: 'Failed to delete user', type: MessageType.Error },
+              false
+            );
+          },
+        })
+      )
+      .subscribe();
+  }
 
   public async copyRoomLink(): Promise<void> {
     const host = this.#host.nativeElement;

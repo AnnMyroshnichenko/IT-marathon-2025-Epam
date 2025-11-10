@@ -57,4 +57,19 @@ export class UserService {
       })
     );
   }
+
+  public deleteUser(userId: number): Observable<HttpResponse<void>> {
+    return this.#apiService.deleteUser(userId, this.#userCode()).pipe(
+      tap(({ status }) => {
+        if (status === 200) {
+          this.getUsers().subscribe();
+        } else {
+          this.#toasterService.show(
+            ToastMessage.SomethingWentWrong,
+            MessageType.Error
+          );
+        }
+      })
+    );
+  }
 }
