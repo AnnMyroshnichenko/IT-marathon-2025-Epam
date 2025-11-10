@@ -2,7 +2,7 @@
 # General
 ################################################################################
 
-aws_region = "eu-central-1"
+aws_region = "eu-north-1"
 az_letter  = "a"
 tags = {
   owner = "terraform"
