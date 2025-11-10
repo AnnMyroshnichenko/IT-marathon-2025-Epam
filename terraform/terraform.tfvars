@@ -2,7 +2,7 @@
 # General
 ################################################################################
 
-aws_region = "eu-north-1"
+aws_region = "eu-central-1"
 az_letter  = "a"
 tags = {
   owner = "terraform"
@@ -54,7 +54,7 @@ web_ui_port       = 80
 ################################################################################
 #Amazon Linux 2023 AMI 2023.8.20250808.1 x86_64 HVM kernel-6.1 in eu-central-1
 
-ami          = "ami-0ce374cbf964b8f28"
+ami          = "ami-015cbce10f839bd0c"
 ec2_name_set = ["react", "angular", "dotnet"]
 subnet       = ""
 sgs          = []
