@@ -57,6 +57,7 @@ web_ui_port       = 80
 ami          = "ami-015cbce10f839bd0c"
 ec2_name_set = ["react", "angular", "dotnet"]
 subnet       = ""
+associate_public_ip_address = true
 sgs          = []
 iam_role_policies = {
   AdministratorAccess = "arn:aws:iam::aws:policy/AdministratorAccess",
